@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { colors, moderateScale, verticalScale } from '../../theme';
+import {colors, moderateScale, verticalScale} from '../../theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,8 +7,16 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.black,
     paddingHorizontal: moderateScale(20),
     paddingVertical: verticalScale(16),
-    elevation:5,
-    shadowColor: colors.black,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backIcon: {
+    width: moderateScale(24),
+    height: verticalScale(24),
+    tintColor: colors.white,
+    marginRight: moderateScale(20),
   },
   heading: {
     color: colors.white,

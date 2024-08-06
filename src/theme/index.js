@@ -12,4 +12,6 @@ const moderateScale = (size, factor = 0.5) =>
 
 export {height, width, scale, verticalScale, moderateScale};
 
+export * from './strings';
+export * from './images';
 export * from './colors';
