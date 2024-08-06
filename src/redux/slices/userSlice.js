@@ -53,6 +53,7 @@ const userSlice = createSlice({
           action.payload.length > 0 && action.payload.length < PER_PAGE_USERS
             ? false
             : true;
+        state.error = null;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;

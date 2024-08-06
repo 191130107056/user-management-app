@@ -14,6 +14,7 @@ import { colors, strings } from "../../theme";
 import { USER_DETAIL_SCREEN } from "../../constants/Stack";
 import { styles } from "./styles";
 import Header from "../../components/Header";
+import NetworkConnection from '../../components/NetworkConnection';
 
 const UserListScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -62,7 +63,10 @@ const UserListScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Header heading={strings.users} isBack={false} />
       {error ? (
-        <Text style={styles.error}>{error}</Text>
+          <NetworkConnection
+            error={error}
+            handleRefresh={handleRefresh}
+          />
       ) : (
       <FlatList
         contentContainerStyle={styles.listContainer}

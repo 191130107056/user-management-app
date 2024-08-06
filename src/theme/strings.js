@@ -9,5 +9,5 @@ export const strings = {
     username : 'Username',
     age : 'Age',
     registered : 'Registered',
-    
+    retry : 'Retry',
   };
