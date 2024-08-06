@@ -34,7 +34,6 @@ const UserListScreen = ({ navigation }) => {
   };
 
   const handleRefresh = async () => {
-    console.log('handleRefresh', loading, hasNextPage);
     if (!refreshing && !loading) {
       await dispatch(resetPage());
       await dispatch(fetchUsers(page));
