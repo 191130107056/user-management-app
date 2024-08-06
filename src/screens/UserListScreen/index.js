@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from 'react';
 import {
   View,
   FlatList,
@@ -6,9 +6,10 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Image,
+  RefreshControl,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, increamentPage } from "../../redux/slices/userSlice";
+import { fetchUsers, increamentPage, resetPage } from "../../redux/slices/userSlice";
 import { colors, strings } from "../../theme";
 import { USER_DETAIL_SCREEN } from "../../constants/Stack";
 import { styles } from "./styles";
@@ -16,7 +17,7 @@ import Header from "../../components/Header";
 
 const UserListScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { users, loading, hasNextPage, page, error } = useSelector(
+  const { users, loading, hasNextPage, page, error,refreshing } = useSelector(
     (state) => state.users
   );
 
@@ -25,8 +26,16 @@ const UserListScreen = ({ navigation }) => {
   }, []);
 
   const handleLoadMore = async () => {
-    if (!loading && hasNextPage) {
+    if (!loading && hasNextPage && !refreshing) {
       await dispatch(increamentPage());
+      await dispatch(fetchUsers(page));
+    }
+  };
+
+  const handleRefresh = async () => {
+    console.log('handleRefresh', loading, hasNextPage);
+    if (!refreshing && !loading) {
+      await dispatch(resetPage());
       await dispatch(fetchUsers(page));
     }
   };
@@ -55,22 +64,25 @@ const UserListScreen = ({ navigation }) => {
       {error ? (
         <Text style={styles.error}>{error}</Text>
       ) : (
-        <FlatList
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-          data={users}
-          keyExtractor={(item) => item.login.uuid}
-          renderItem={renderItem}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            loading ? (
-              <ActivityIndicator size="large" color={colors.black} />
-            ) : (
+      <FlatList
+        contentContainerStyle={styles.listContainer}
+        showsVerticalScrollIndicator={false}
+        data={users}
+        keyExtractor={item => item.login.uuid}
+        renderItem={renderItem}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        ListFooterComponent={
+          loading ? (
+            <ActivityIndicator size="large" color={colors.black} />
+          ) : (
               !hasNextPage && <Text style={styles.userEmail}>No More Data</Text>
-            )
-          }
-        />
+          )
+        }
+      />
       )}
     </View>
   );

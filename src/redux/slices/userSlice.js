@@ -28,6 +28,7 @@ const userSlice = createSlice({
     hasNextPage: true,
     page: 1,
     error: null,
+    refreshing: false,
   },
   reducers: {
     increamentPage(state) {
@@ -35,6 +36,7 @@ const userSlice = createSlice({
     },
     resetPage(state) {
       state.page = 1;
+      state.refreshing = true;
     },
   },
   extraReducers: (builder) => {
@@ -44,6 +46,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false;
+        state.refreshing = false;
         state.users =
           state.page > 1 ? [...state.users, ...action.payload] : action.payload;
         state.hasNextPage =
@@ -54,6 +57,7 @@ const userSlice = createSlice({
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.refreshing = false;
       });
   },
 });
